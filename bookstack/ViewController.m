@@ -1,24 +1,24 @@
 //
-//  FinishedViewController.m
+//  ViewController.m
 //  bookstack
 //
-//  Created by Shivani Khanna on 12/30/16.
+//  Created by Shivani Khanna on 10/4/16.
 //  Copyright © 2016 sandc. All rights reserved.
 //
 
-#import "FinishedViewController.h"
+#import "ViewController.h"
 #import "SCBook.h"
 #import "BookDetailViewController.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 #import "AboutViewController.h"
 
-@interface FinishedViewController ()
+@interface ViewController ()
 
 @end
-NSMutableArray *finishedList;
+NSMutableArray *readingList;
 
-@implementation FinishedViewController
+@implementation ViewController
 @synthesize tableView;
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -27,24 +27,25 @@ NSMutableArray *finishedList;
     [tableView reloadData];
 }
 
--(void)populateList {
+- (void)populateList {
+    
     [tableView removeFromSuperview];
     NSUserDefaults *currentDefaults = [NSUserDefaults standardUserDefaults];
-    NSData *dataRepresentingSavedArray = [currentDefaults objectForKey:@"finishedReading"];
+    NSData *dataRepresentingSavedArray = [currentDefaults objectForKey:@"reading"];
     if (dataRepresentingSavedArray != nil)
     {
         NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingSavedArray];
         if (oldSavedArray != nil)
         {
-            finishedList = [[NSMutableArray alloc] initWithArray:oldSavedArray];
+            readingList = [[NSMutableArray alloc] initWithArray:oldSavedArray];
         }
         else
         {
-            finishedList = [[NSMutableArray alloc] init];
+            readingList = [[NSMutableArray alloc] init];
         }
     }
-    float height = finishedList.count * 80;
-    if (height < 80.0f)
+    float height = readingList.count * 80;
+     if (height < 80.0f)
     {
         height = height + 80.0f;
     }
@@ -52,55 +53,61 @@ NSMutableArray *finishedList;
     {
         height = 520.0f;
     }
-    if(finishedList.count > 0)
+    if(readingList.count > 0)
     {
         tableView = [[UITableView alloc]initWithFrame:CGRectMake(15.0, 70.0, 345.0, height)];
         tableView.delegate = self;
         tableView.dataSource = self;
         tableView.layer.cornerRadius = 10.0f;
         self.edgesForExtendedLayout = UIRectEdgeNone;
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, self.bottomLayoutGuide.length, 0);
         [self.view addSubview:tableView];
+
+        UIView *removeView  = [self.view viewWithTag:101];
+        [removeView removeFromSuperview];
+        removeView  = [self.view viewWithTag:102];
+        [removeView removeFromSuperview];
+        removeView  = [self.view viewWithTag:103];
+        [removeView removeFromSuperview];
         
-        UIView *removeView  = [self.view viewWithTag:107];
-        [removeView removeFromSuperview];
-        removeView  = [self.view viewWithTag:108];
-        [removeView removeFromSuperview];
-        removeView  = [self.view viewWithTag:109];
-        [removeView removeFromSuperview];
     }
-    else {
+    else
+    {
         UILabel *labelBig = [[UILabel alloc]initWithFrame:CGRectMake(83.0, 170.0, 209.0, 48.0)];
         labelBig.font = [UIFont systemFontOfSize:20.0];
         labelBig.textColor = [UIColor colorWithRed:105/255.0 green:119/255.0 blue:127/255.0 alpha:1.0];
-        labelBig.text = @"This stack is empty.";
+        labelBig.text = @"You're not reading a book right now.";
         labelBig.textAlignment = NSTextAlignmentCenter;
         labelBig.numberOfLines = 0;
-        labelBig.tag = 107;
+        labelBig.tag = 101;
         [self.view addSubview:labelBig];
         
         UILabel *labelSmall = [[UILabel alloc]initWithFrame:CGRectMake(54.0, 220.0, 268.0, 36.0)];
         labelSmall.font = [UIFont systemFontOfSize:15.0];
         labelSmall.textColor = [UIColor colorWithRed:105/255.0 green:119/255.0 blue:127/255.0 alpha:1.0];
-        labelSmall.text = @"Add books you've already read to this stack.";
+        labelSmall.text = @"You can start addings books to this stack by tapping the orange button below.";
         labelSmall.textAlignment = NSTextAlignmentCenter;
         labelSmall.numberOfLines = 0;
-        labelSmall.tag = 108;
+        labelSmall.tag = 102;
         [self.view addSubview:labelSmall];
         
-        UIImage *image = [UIImage imageNamed:@"mvp-assets/icon-finished-large.png"];
+        UIImage *image = [UIImage imageNamed:@"mvp-assets/icon-reading-large.png"];
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(165.0, 280.0, 56.0, 66.0)];
         imageView.image = image;
-        imageView.tag = 109;
+        imageView.tag = 103;
         [self.view addSubview:imageView];
     }
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    // Do any additional setup after loading the view, typically from a nib.
     UIImage *image = [UIImage imageNamed:@"mvp-assets/logo-horiz.png"];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     [self.navigationItem setTitleView:imageView];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:240/255.0 green:244/255.0 blue:247/255.0 alpha:1.0];
     
     UIButton *btnRight = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnRight setFrame:CGRectMake(0, 0, 24, 24)];
@@ -111,8 +118,9 @@ NSMutableArray *finishedList;
     //[[[self tabBarController] navigationItem] setRightBarButtonItem:barBtnRight];
     [self.navigationItem setRightBarButtonItem:barBtnRight];
 
+    //[self.parentViewController.tabBarController setSelectedIndex:1];
     
-    self.view.backgroundColor = [UIColor colorWithRed:240/255.0 green:244/255.0 blue:247/255.0 alpha:1.0];
+   // [self populateList];
     
     UILabel *titleBlock = [[UILabel alloc]initWithFrame:CGRectMake(15, 15, 345, 44)];
     titleBlock.backgroundColor = [UIColor colorWithRed:226/255.0 green:231/255.0 blue:234/255.0 alpha:1.0];
@@ -124,26 +132,20 @@ NSMutableArray *finishedList;
     titleBlockText.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightBold];
     titleBlockText.textColor = [UIColor blackColor];
     titleBlockText.textColor = [UIColor colorWithRed:105/255.0 green:119/255.0 blue:127/255.0 alpha:1.0];
-    titleBlockText.text = @"FINISHED READING";
+    titleBlockText.text = @"READING";
     titleBlockText.numberOfLines = 0;
     [self.view addSubview:titleBlockText];
     
-    UIImage *stackIcon = [UIImage imageNamed:@"mvp-assets/icon-finished-small-grey.png"];
+    UIImage *stackIcon = [UIImage imageNamed:@"mvp-assets/icon-reading-small-grey.png"];
     UIImageView *imageViewLogo = [[UIImageView alloc] initWithFrame:CGRectMake(27, 26, 18, 21)];
     imageViewLogo.image = stackIcon;
     [self.view addSubview:imageViewLogo];
-    
-   // [self populateList];
-}
+
+    }
 
 -(void)infoClick {
     AboutViewController *aboutViewController = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
     [self presentViewController:aboutViewController animated:YES completion:nil];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -151,12 +153,12 @@ NSMutableArray *finishedList;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return finishedList.count;
+    return readingList.count;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     BookDetailViewController *viewController = [[BookDetailViewController alloc] initWithNibName:@"BookDetailViewController" bundle:nil];
-    viewController.book = [finishedList objectAtIndex:indexPath.row];
+    viewController.book = [readingList objectAtIndex:indexPath.row];
     [self presentViewController:viewController animated:YES completion:nil];
 }
 
@@ -168,29 +170,30 @@ NSMutableArray *finishedList;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)thistableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     static NSString *CellIdentifier = @"Cell";
     
     MGSwipeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    SCBook *book = [finishedList objectAtIndex:indexPath.row];
+    SCBook *book = [readingList objectAtIndex:indexPath.row];
     if (cell == nil) {
         cell = [[MGSwipeTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.separatorInset = UIEdgeInsetsZero;
         cell.layoutMargins = UIEdgeInsetsZero;
         cell.preservesSuperviewLayoutMargins = NO;
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(70, 0, 200, 60)];
         
-        UIView *separatorLine = [[UIView alloc] initWithFrame:
-                                 CGRectMake(0, 79.0f,
-                                            cell.frame.size.width, 5)];
-        separatorLine.backgroundColor = [UIColor colorWithRed:240/255.0 green:244/255.0 blue:247/255.0 alpha:1.0];
-        [cell.contentView addSubview: separatorLine];
-        
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(72, 0, 200, 60)];
         //label.text = [NSString stringWithFormat:@"%@", book.title];
         label.tag = 12;
         label.textColor = [UIColor blackColor];
         label.font = [UIFont boldSystemFontOfSize:17.0];
         label.textColor = [UIColor colorWithRed:60/255.0 green:70/255.0 blue:75/255.0 alpha:1.0];
         [cell.contentView addSubview:label];
+        
+        UIView *separatorLine = [[UIView alloc] initWithFrame:
+                                 CGRectMake(0, 79.0f,
+                                            cell.frame.size.width, 1)];
+        separatorLine.backgroundColor = [UIColor colorWithRed:240/255.0 green:244/255.0 blue:247/255.0 alpha:1.0];
+        [cell.contentView addSubview: separatorLine];
         
         if(book.author != nil && book.author.length > 0)
         {
@@ -204,30 +207,30 @@ NSMutableArray *finishedList;
         }
     }
     
-    cell.leftButtons = @[[MGSwipeButton buttonWithTitle:@"Delete" icon:[UIImage imageNamed:@"mvp-assets/list-btn-trash.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
-        [finishedList removeObjectAtIndex:indexPath.row];
+    cell.leftButtons = @[[MGSwipeButton buttonWithTitle:@"Delete" icon:[UIImage imageNamed:@"listbuttons/list-btn-trash.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+        [readingList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self removeFromNSUserDefaults:@"finishedReading" andBook:book];
+        [self removeFromNSUserDefaults:@"reading" andBook:book];
         [self populateList];
         [tableView reloadData];
         [self animateResultsLabel:0];
         return YES;
     }]];
     cell.leftSwipeSettings.transition = MGSwipeTransitionStatic;
-    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"mvp-assets/list-btn-plantoread.png"]backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
-        [finishedList removeObjectAtIndex:indexPath.row];
+    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"listbuttons/list-btn-finished.png"]backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+        [readingList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self removeFromNSUserDefaults:@"finishedReading" andBook:book];
-        [self saveToNSUserDefaults:@"planToRead" andBook:book];
+        [self removeFromNSUserDefaults:@"reading" andBook:book];
+        [self saveToNSUserDefaults:@"finishedReading" andBook:book];
         [self populateList];
         [tableView reloadData];
         [self animateResultsLabel:1];
         return YES;
-    }], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"mvp-assets/list-btn-reading.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
-        [finishedList removeObjectAtIndex:indexPath.row];
+    }], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"listbuttons/list-btn-plantoread.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+        [readingList removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self removeFromNSUserDefaults:@"finishedReading" andBook:book];
-        [self saveToNSUserDefaults:@"reading" andBook:book];
+        [self removeFromNSUserDefaults:@"reading" andBook:book];
+        [self saveToNSUserDefaults:@"planToRead" andBook:book];
         [self populateList];
         [tableView reloadData];
         [self animateResultsLabel:2];
@@ -263,7 +266,12 @@ NSMutableArray *finishedList;
         [task resume];
     }
     return cell;
+
 }
+
+
+
+
 
 -(void)animateResultsLabel:(int)userCommand {
     UILabel *backgroundLabel = [[UILabel alloc]initWithFrame:CGRectMake(00.0, 00.0, self.view.frame.size.width, 50.0)];
@@ -357,6 +365,11 @@ NSMutableArray *finishedList;
     }
     // NSLog(@"in %@, book title is %@", arrayOfBooks, book.title);
     [[NSUserDefaults standardUserDefaults] setObject:[NSKeyedArchiver archivedDataWithRootObject:arrayOfBooks] forKey:userDefault];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 @end
