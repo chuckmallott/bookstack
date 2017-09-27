@@ -201,7 +201,7 @@ NSMutableArray *planToRead;
         }
     }
     
-    cell.leftButtons = @[[MGSwipeButton buttonWithTitle:@"Delete" icon:[UIImage imageNamed:@"listbuttons/list-btn-trash.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+    cell.leftButtons = @[[MGSwipeButton buttonWithTitle:@"Delete" icon:[UIImage imageNamed:@"mvp-assets/list-btn-trash.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
         [planToRead removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self removeFromNSUserDefaults:@"planToRead" andBook:book];
@@ -211,7 +211,7 @@ NSMutableArray *planToRead;
         return YES;
     }]];
     cell.leftSwipeSettings.transition = MGSwipeTransitionStatic;
-    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"listbuttons/list-btn-finished.png"]backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+    cell.rightButtons = @[[MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"mvp-assets/list-btn-finished.png"]backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
         [planToRead removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self removeFromNSUserDefaults:@"planToRead" andBook:book];
@@ -220,7 +220,7 @@ NSMutableArray *planToRead;
         [tableView reloadData];
         [self animateResultsLabel:1];
         return YES;
-    }], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"listbuttons/list-btn-reading.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
+    }], [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"mvp-assets/list-btn-reading.png"] backgroundColor:[UIColor clearColor] padding:0 callback:^BOOL(MGSwipeTableCell *sender) {
         [planToRead removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [self removeFromNSUserDefaults:@"planToRead" andBook:book];
