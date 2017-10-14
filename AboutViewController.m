@@ -57,9 +57,10 @@
     
     UIButton *btnFeedback = [UIButton buttonWithType:UIButtonTypeCustom];
     btnFeedback.frame = CGRectMake(50.0, 440.0, 275.0, 40.0);
-    btnFeedback.backgroundColor = [UIColor colorWithRed:105/255.0 green:119/255.0 blue:127/255.0 alpha:1.0];
+    btnFeedback.backgroundColor = [UIColor colorWithRed:249/255.0 green:80/255.0 blue:32/255.0 alpha:1.0];
     [btnFeedback setTitle:@"Send Feedback" forState:UIControlStateNormal];
     btnFeedback.titleLabel.textColor = [UIColor whiteColor];
+    btnFeedback.layer.cornerRadius = 3.0f;
     btnFeedback.titleLabel.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightBold];
     [btnFeedback addTarget:self
             action:@selector(feedbackClick)
