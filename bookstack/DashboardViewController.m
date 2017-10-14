@@ -22,7 +22,7 @@ NSArray *tableImages;
     [super viewWillAppear:animated];
     [tableView removeFromSuperview];
     [self.tabBarController setSelectedIndex:0];
-    tableView = [[UITableView alloc]initWithFrame:CGRectMake(15.0, 70, 345.0, 185.0)];
+    tableView = [[UITableView alloc]initWithFrame:CGRectMake(15.0, 70, 345.0, 180.0)];
     tableView.layer.cornerRadius = 10.0f;
     tableView.delegate = self;
     tableView.dataSource = self;
